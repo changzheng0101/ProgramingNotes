@@ -5,3 +5,4 @@
 ```javascript
 unique-opened="true"-->:unique-opened="true"
 ```
+主义分号 感觉有了分号 后面才是js中的值
