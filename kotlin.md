@@ -625,6 +625,41 @@ level：Debug, Info, Warn, Error, Fatal (from the least critical level to the mo
 
 * java不支持默认的构造函数
 
+## java虚拟机
+
+执行程序时，先将java代码编译为.class文件(bytecode)
+
+之后JVM主要完成如下工作
+
+* loads bytecode
+* verify bytecode
+* execute bytecode
+* provide the runtime environment
+
+### JVM构造
+
+![img](https://ucarecdn.com/1e15b25e-8cb4-42d4-9c3f-8a697c9458b4/)
+
+class loader
+
+​	完成基本的校验工作
+
+
+
+- **PC register** holds the address of the currently executing instruction;
+- **stack area** is a memory place where methods' calls and local variables are stored;
+- **native method stack** stores native method information;
+- **heap** stores all created objects (instances of classes);
+- **method area** stores all the class level information like class name, immediate parent class name, method information and all static variables.
+
+Every thread has its own **PC register**, **stack**, and **native method stack**, but all threads share the same **heap** and **method area.**
+
+##### Execution engine
+
+- **bytecode interpreter** interprets the bytecode line by line and executes it (rather slowly);
+- **just-in-time compiler** (JIT compiler) translates bytecode into native machine language while executing the program (it executes the program faster than the interpreter);
+- **garbage collector** cleans unused objects from the heap.
+
 ## 特殊程序
 
 ```kotlin
