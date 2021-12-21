@@ -1,4 +1,4 @@
-#  kotlin基础语法
+ #  kotlin基础语法
 
 ## 注意
 
@@ -125,6 +125,20 @@ for (i in "aa".."ad") {}//报错
 //"aa".."ad" 其实有无穷个数据
 ```
 
+```kotlin
+//普通跳出循环 只能跳出一个循环 这个可以跳出多层
+loop@ for (i in 1..3) { 
+    for (j in 1..3) {
+        println("i = $i, j = $j")   
+        if (j == 3) break@loop  
+    }  
+}  
+
+i = 1, j = 1
+i = 1, j = 2
+i = 1, j = 3
+```
+
 
 
 ## 类型
@@ -167,6 +181,25 @@ val str='hello' //error must use ""
 subString左闭右开
 
 replace 不会改变原来的字符串
+
+```kotlin
+val sentence = "a long text"
+val wordsList: List<String> = sentence.split(" ") // ["a", "long", "text"]
+//List无法进行赋值和改变大小！！！
+
+val mutableWordList = sentence.split(" ").toMutableList() // MutableList ["a", "long", "text"]
+```
+
+```kotlin
+val scientistName = "Isaac Newton"
+
+for (i in 0 until scientistName.length) {
+    print("${scientistName[i]} ") // print the current character
+}
+//I s a a c   N e w t o n 
+```
+
+
 
 ### Char
 
@@ -295,7 +328,7 @@ replace 不会改变原来的字符串
     fun eval(expr: Expr): Int =
         when (expr) {
             is Num -> expr.value
-                is Sum -> eval(expr.left) + eval(expr.right)
+            is Sum -> eval(expr.left) + eval(expr.right)
         }
     
     sealed interface Expr
@@ -341,6 +374,65 @@ replace 不会改变原来的字符串
 
   * 声明单例类很好用
 
+    * ```kotlin
+      object PlayingField {
+      
+          fun getAllPlayers(): Array<Player> {
+              /* ... */
+          }
+          
+          fun isPlayerInGame(player: Player): Boolean {
+              /* ... */
+          }
+      
+      }
+      ```
+
+  * 静态变量
+
+    * ```kotlin
+      class Player(val id: Int) {
+          object Properties {
+              /* Default player speed in playing field – 7 cells per turn */
+              val defaultSpeed = 7
+      
+              fun calcMovePenalty(cell: Int): Int {
+                  /* calc move speed penalty */
+              }
+          }
+      
+          /* creates a new instance of Player */
+          object Factory {
+              fun create(playerId: Int): Player {
+                  return Player(playerId)
+              }
+          }
+      }
+      
+      /* prints 7 */
+      println(Player.Properties.defaultSpeed)
+      
+      
+      /* prints 13 */
+      println(Player.Factory.create(13).id)
+      ```
+
+  * ```kotlin
+    //全局数据放在这里，类似于java中的接口
+    object Game {
+        object Properties {
+            val maxPlayersCount = 13
+            val maxGameDurationInSec = 2400
+        }
+    
+        object Info {
+            val name = "My super game"
+        }
+    }
+    ```
+
+  * 
+
 * repeat
 
   * ```kotlin
@@ -365,7 +457,41 @@ replace 不会改变原来的字符串
     //语法正确 但是结果为false
     ```
 
-    
+* when
+
+  * ```kotlin
+    when (op) {
+        "+", "plus" -> {
+            val sum = a + b
+            println(sum)
+        }
+        "-", "minus" -> {
+            val diff = a - b
+            println(diff)
+        }
+        "*", "times" -> {
+            val product = a * b
+            println(product)
+        }
+        else -> println("Unknown operator")
+    }
+    ```
+
+  * ```kotlin
+    fun main(){
+        val n = readLine()!!.toInt()
+        
+        when {
+            n == 0 -> println("n is zero")
+            n in 100..200 -> println("n is between 100 and 200")
+            n > 300 -> println("n is greater than 300")
+            n < 0 -> println("n is negative")
+            // else-branch is optional here
+        }
+    }
+    ```
+
+  * 
 
 
 
@@ -488,9 +614,84 @@ println(a)
 println(b)
 ```
 
+### 函数也是对象
+
+```kotlin
+fun sum(a: Int, b: Int): Int = a + b
+//sum has a type of (Int, Int) -> Int.
+
+val sumObject = ::sum //sumObject现在是对函数的引用
+//区别
+val sumResult = sum(1, 2)
+```
+
+```kotlin
+fun applyAndSum(a: Int, b: Int, transformation: (Int) -> Int): Int {
+    return transformation(a) + transformation(b)
+}
+
+fun same(x: Int) = x
+fun square(x: Int) = x * x
+fun triple(x: Int) = 3 * x
+
+applyAndSum(1, 2, ::same)    // returns 3 = 1 + 2
+applyAndSum(1, 2, ::square)  // returns 5 = 1 * 1 + 2 * 2
+applyAndSum(1, 2, ::triple)  // returns 9 = 3 * 1 + 3 * 2
+```
+
+### Lambda expressions
+
+不需要函数名的两种方式：
+
+- `fun(arguments): ReturnType { body }` – this one is commonly called an "anonymous function".
+- `{ arguments -> body }` – this one is commonly called a "lambda expression".
+
+没有函数名如何使用函数
+
+```kotlin
+val mul1 = fun(a: Int, b: Int): Int {
+    return a * b
+}
+
+val mul2 = { a: Int, b: Int -> a * b }
+
+println(mul1(2, 3))  // prints "6"
+println(mul2(2, 3))  // prints "6" too
+```
+
+```kotlin
+//再谈函数的简化过程
+originalText.filter({ c -> c != '.' })
+originalText.filter() { c -> c != '.' }
+originalText.filter { c -> c != '.' }
+```
+
 
 
 ## 类
+
+### 构造函数
+
+```kotlin
+class Size(_width: Int, _height: Int) {
+    var width: Int = 0
+    var height: Int = 0
+
+    //这里每次都会被执行
+    init {
+        width = if (_width >= 0) _width else {
+            println("Error, the width should be a non-negative value")
+            0
+        }
+        height = if (_height >= 0) _height else {
+            println("Error, the height should be a non-negative value")
+            0
+        }
+    }
+}
+```
+
+
 
 ### 继承
 
@@ -537,6 +738,32 @@ class LoginFragment : Fragment() {
     }
 }
 ```
+
+### 内部类
+
+```kotlin
+class Cat(val name: String) {
+    fun sayMeow() {
+        println("$name says: \"Meow\".")
+    }
+
+    inner class Bow(val color: String) {
+        fun putOnABow() {
+            sayMeow()
+            println("The bow is on!")
+        }
+
+        fun printColor() {
+            println("The cat named $name has a $color bow.")
+        }
+    }
+}
+```
+
+- A class declared inside another class is called nested.
+- An **inner class** is a special case of a nested class that **can access the members of its outer class**.
+- Inner classes carry a reference to an object of an outer class, so to use inner classes, we must instantiate an outer class first.
+- The main idea of inner classes is to hide some code from other classes and increase encapsulation.
 
 ## java互调
 
@@ -657,8 +884,25 @@ Every thread has its own **PC register**, **stack**, and **native method stack**
 ##### Execution engine
 
 - **bytecode interpreter** interprets the bytecode line by line and executes it (rather slowly);
+
 - **just-in-time compiler** (JIT compiler) translates bytecode into native machine language while executing the program (it executes the program faster than the interpreter);
+
 - **garbage collector** cleans unused objects from the heap.
+
+  - 调用
+    - Runtime.getRuntime().gc()
+    - System.gc()
+    - 请求垃圾收集器执行，但是不一定会执行
+
+- GC两种策略
+
+  - **Reference counting** 没创建一个对象就会有指针指向他，当指针为0时候，该对象被清除，但是无法辨别AB互相指向对方的情况。
+  - **Tracing**一般JVM都用这种方法，**local variables** and **method parameters**, **threads**, **static variables**.作为节点，之后不断延伸，如果没有连接，就是不用的，但是必须全部遍历，才能进行删除操作
+
+  * 缺点
+    * 自动的垃圾收集机制消耗大量资源
+    * 需要程序暂停一段时间执行垃圾回收机制
+    * 内存不连续，每次删除掉对象，都需要复写对象让对象在内存中挨在一起
 
 ## 特殊程序
 
