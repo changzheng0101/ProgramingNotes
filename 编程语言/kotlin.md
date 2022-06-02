@@ -533,6 +533,14 @@ fun generateAnswerString(countThreshold: Int): String = if (count > countThresho
     }
 ```
 
+匿名函数的特殊之处：在运行时创建，所以可以访问**已经声明的其他变量**
+
+```kotlin
+
+```
+
+
+
 ### 匿名函数
 
 ```kotlin

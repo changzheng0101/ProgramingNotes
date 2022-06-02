@@ -71,3 +71,59 @@ class SanXingHardWare implements HardDrive{
 
 * 动态网页开发技术
 * 在html文件中内置java代码对信息进行处理
+
+
+
+## Restful API
+
+**使用HAL进行--restful 风格改进**
+
+Controller方面
+
+返回的参数
+
+```json
+{
+  "_embedded": {
+    "employeeList": [
+      {
+        "id": 1,
+        "name": "Bilbo Baggins",
+        "role": "burglar",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/employees/1"
+          },
+          "employees": {
+            "href": "http://localhost:8080/employees"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "name": "Frodo Baggins",
+        "role": "thief",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/employees/2"
+          },
+          "employees": {
+            "href": "http://localhost:8080/employees"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/employees"
+    }
+  }
+}
+```
+
+添加了_links，里面有不同的标签，只要将来link之间的链式关系不变，改变url是无妨的
+
+adding hypermedia to your service without hard coding a thing
+
+连接之间不再硬编码

@@ -1,3 +1,63 @@
+# 有用的快捷键
+
+打开终端 crtl + alt +T
+
+改变字体大小 crtl + shift + +
+
+​					crtl + -
+
+清屏 crtl + l
+
+关闭终端 crtl + shift + w
+
+# 文件权限问题
+
+​						
+
+| drwxr-xr-x                                                   | 3    | root   | root   | 4096 Dec 22 18:33 | .    |
+| ------------------------------------------------------------ | ---- | ------ | ------ | ----------------- | ---- |
+| （文件类型）（文件所有者--u）（组权限---g）（其他所有用户--o） |      | 所有者 | 所在组 | 文件大小 修改时间 | 名称 |
+
+a---所有用户
+
+chmod  u=rwx filename
+
+chmod u+x filename	
+
+chmod o-x filename
+
+chmod 777 filename
+
+chmod -r 777 dir/
+
+chown root filename 将某个文件拥有者变为root用户
+
+chgrp root filename 将文件的组改变root
+
+
+
+hostname  查看宿主机名字
+
+更改在 sudo vim /etc/hostname
+
+
+
+id 
+
+groups 展示分组
+
+lsb_release -a 展示当前系统信息---或者 cat /etc/os-release
+
+lscpu 查看cpu信息
+
+uname 打印系统信息
+
+
+
+# ls
+
+ls -lR 文件名 --- 列出文件的所有子文件
+
 # man 
 
 * 后加命令 调出帮助文档
@@ -9,6 +69,10 @@
 主要更新时间和修改次数,可创建文件
 
 
+
+# locate
+
+* locate /ect --all "password" 在etc文件夹下准确找出名字中包含password的
 
 # rm
 
@@ -166,7 +230,7 @@ xdg-open linux平台打开文件
 * killall -9 node 杀死所有node
 * 不是精确匹配
 
-## jobs
+# jobs
 
 * 查看所有停止的进程
 * 用crtl 加z 进行停止

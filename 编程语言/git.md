@@ -337,7 +337,7 @@ stash:存储改变的地方(存储还没有commit的)
 
 # 常见问题汇总
 
-# Please commit your changes or stash them before you merge
+## Please commit your changes or stash them before you merge
 
 1. git stash
 2. git pull
@@ -348,3 +348,21 @@ stash:存储改变的地方(存储还没有commit的)
 第二步将云端的拉下来
 
 第三步暂存内容通过栈管理，这个是弹出最顶部的
+
+# 常见操作
+
+## 完成切换到某一个提交，之后自由提交
+
+1.git checkout hash值 切换到你想要切换的hash值对应的提交
+
+2.自由修改，commit什么的，不会有影响
+
+3.**git switch -** 直接取消进行的修改，回到1之前的状态
+
+​	**git switch -c new-branch-name** 创建一个新分支，记录你当前进行的提交 
+
+## 删除远程分支
+
+远程分支： 一般是 origin/bugfix之类的形式
+
+git push origin :bugfix 注意origin之后要有空格
